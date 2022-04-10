@@ -19,7 +19,7 @@ sudo cp bin/* /usr/local/bin
 crylox script_file.lox
 ```
 
-## The
+## The Naming
 
 As you guess, the name CryLox is concatenation of the Cryogenic and Lox. Not Crystal and Lox. The Lox itself means "Liquid Oxygen" which used in Cryogenics.
 
