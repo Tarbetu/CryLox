@@ -39,6 +39,20 @@ class Scanner
       add_token(match('=') ? Token::Type::LessEqual : Token::Type::Less)
     when '>'
       add_token(match('=') ? Token::Type::GreaterEqual : Token::Type::Greater)
+    when '/'
+      if match '/'
+        until peek == '\n' && at_end?
+          advance
+        end
+      else
+        add_token(Token::Type::Slash)
+      end
+    when ' ', '\r', '\t'
+      return
+    when '\n'
+      @line += 1
+    when '"'
+      string
     else
       Crylox::Executer.error(line, "Unexcepted character")
     end
@@ -63,9 +77,31 @@ class Scanner
 
   private def add_token(type : Token::Type, literal : String | Nil)
     text : String = @source[start..current]
+    @tokens.push(Token::Processor.new(type, text, literal, @line))
   end
 
   private def at_end? : Boolean
     current >= @source.length
+  end
+
+  private def peek : Char
+    return '\0' if at_end?
+    source[current]
+  end
+
+  private def string : Nil
+    until peek == '"' && at_end?
+      @line += 1 if peek == '\n'
+      advance
+    end
+
+    if at_end?
+      return Crylox::Executer.error(line, "Unterminated string.")
+    end
+
+    advance
+
+    value = source[(@start + 1)..(current - 1)]
+    add_token(Token::Type::String, value)
   end
 end
