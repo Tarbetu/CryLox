@@ -1,0 +1,13 @@
+name: crylox
+version: 0.1.0
+
+authors:
+  - your-name-here <emrecansuster@tuta.io>
+
+targets:
+  crylox:
+    main: src/crylox.cr
+
+crystal: 1.4.0
+
+license: MIT
