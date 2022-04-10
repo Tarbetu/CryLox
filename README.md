@@ -1,22 +1,31 @@
 # crylox
 
-TODO: Write a description here
+[Lox](https://craftinginterpreters.com/the-lox-language.html) is an programming language with minimal features, but still have some features like OOP.
+
+CryLox is an interpreter for the Lox language written with Crystal.
 
 ## Installation
 
-TODO: Write installation instructions here
+You will need the shards package manager.
+
+```bash
+shards build
+sudo cp bin/* /usr/local/bin
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+```bash
+crylox script_file.lox
+```
 
-## Development
+## The
 
-TODO: Write development instructions here
+As you guess, the name CryLox is concatenation of the Cryogenic and Lox. Not Crystal and Lox. The Lox itself means "Liquid Oxygen" which used in Cryogenics.
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/crylox/fork>)
+1. Fork it (<https://github.com/Tarbetu/crylox/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -24,4 +33,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [your-name-here](https://github.com/your-github-user) - creator and maintainer
+- [Emrecan Şuşter](https://github.com/Tarbetu) - creator and maintainer
