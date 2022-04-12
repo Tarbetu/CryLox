@@ -1,4 +1,5 @@
 require "option_parser"
+require "./scanner"
 
 # Crylox is a Lox interpreter in Crystal
 module Crylox
@@ -36,12 +37,11 @@ module Crylox
     end
 
     def self.run(command : String)
-      # scanner : Scanner = Scanner.new(command)
-      # tokens : Array(Tokens) = scanner.scanTokens
-      # tokens.each do |i|
-      #   puts i
-      # end
-      puts "Not implemented"
+      scanner : Scanner = Scanner.new(command)
+      tokens : Array(Token::Processor) = scanner.scan_tokens
+      tokens.each do |i|
+        puts i
+      end
       @@had_error = false
     end
 
@@ -56,11 +56,11 @@ module Crylox
       end
     end
 
-    def self.error(line : Integer, message : String)
+    def self.error(line : Int32, message : String)
       self.report(line, "", message)
     end
 
-    def self.report(line : Integer, where : Integer, message : String)
+    def self.report(line : Int32, where : String, message : String)
       puts <<-REPORT
       [line #{line}]: Error! #{where} - #{message}
       REPORT

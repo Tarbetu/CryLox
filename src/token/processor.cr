@@ -1,10 +1,12 @@
 module Token
+  alias LiteralType = String | Nil | Float64
+
   class Processor
     def initialize(
       @type    : Type,
       @lexeme  : String,
-      @line    : Integer,
-      @literal : String | Nil
+      @line    : Int32,
+      @literal : LiteralType
     ); end
   end
 
