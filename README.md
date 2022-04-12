@@ -4,6 +4,10 @@
 
 CryLox is an interpreter for the Lox language written with Crystal.
 
+## Status
+
+CryLox is not done yet, it's not useful in anyway.
+
 ## Installation
 
 You will need the shards package manager.

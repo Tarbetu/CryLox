@@ -7,6 +7,24 @@ class Scanner
     @start = 0
     @current = 0
     @line = 1
+    @keywords = {
+      "and" => Tokens::Type::And,
+      "class" => Tokens::Type::Class,
+      "else" => Tokens::Type::Else,
+      "false" => Tokens::Type::False,
+      "for" => Tokens::Type::For,
+      "fun" => Tokens::Type::Fun,
+      "if" => Tokens::Type::If,
+      "nil" => Tokens::Type::Nil,
+      "or" => Tokens::Type::Or,
+      "print" => Tokens::Type::Print,
+      "return" => Tokens::Type::Return,
+      "super" => Tokens::Type::Super,
+      "this" => Tokens::Type::This,
+      "true" => Tokens::Type::True,
+      "var" => Tokens::Type::Var,
+      "while" => Tokens::Type::While
+    }
   end
 
   def scan_tokens
@@ -19,7 +37,8 @@ class Scanner
   end
 
   private def scan_token
-    case advance
+    character = advance
+    case character
     when '(' then add_token(Tokens::Type::LeftParen)
     when ')' then add_token(Tokens::Type::RightParen)
     when '{' then add_token(Tokens::Type::LeftBrace)
@@ -39,6 +58,8 @@ class Scanner
       add_token(match('=') ? Token::Type::LessEqual : Token::Type::Less)
     when '>'
       add_token(match('=') ? Token::Type::GreaterEqual : Token::Type::Greater)
+    when 'o'
+      add_token(Token::Type::Or) if match('r')
     when '/'
       if match '/'
         until peek == '\n' && at_end?
@@ -54,8 +75,50 @@ class Scanner
     when '"'
       string
     else
-      Crylox::Executer.error(line, "Unexcepted character")
+      if number? character
+        number
+      elsif alpha? character
+        identifier
+      else
+        Crylox::Executer.error(line, "Unexcepted character")
+      end
     end
+  end
+
+  private def identifier()
+    while alpha? peek || number? peek
+      advance
+    end
+
+    text = source[start..current - 1]
+    type = keywords[text] || Tokens::Type::Identifier
+    add_token(Tokens::Type::Identifier)
+  end
+
+  private def number
+    while digit? peek
+      advance
+    end
+
+    if peek == '.' && digit? peek_next
+      advance
+
+      while digit? peek
+        advance
+      end
+    end
+
+    add_token(Tokens::Type::Number, BigFloat.new(@source[@start...@current]))
+  end
+
+  private def digit?(character : Char) : Boolean
+    character >= '0' && character <= '9'
+  end
+
+  private def alpha?(character : Char) : Boolean
+    character >= 'a' && character <= 'z' ||
+    character >= 'A' && character <= 'Z' ||
+    character == '_'
   end
 
   private def match(expected : Char) : Boolean
@@ -87,6 +150,11 @@ class Scanner
   private def peek : Char
     return '\0' if at_end?
     source[current]
+  end
+
+  private def peek_next : Char
+    return '\0' if at_end? || current + 1 >= source.length
+    source[current + 1]
   end
 
   private def string : Nil
