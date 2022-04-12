@@ -8,9 +8,9 @@ module Token
       @line    : Int32,
       @literal : LiteralType
     ); end
-  end
 
-  def to_s
-    "#{type} #{lexeme} #{literal}"
+    def to_s(io : IO)
+      io << "#{@type} #{@lexeme} #{@literal}"
+    end
   end
 end

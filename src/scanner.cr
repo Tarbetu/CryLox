@@ -38,7 +38,7 @@ class Scanner
   end
 
   private def scan_token
-    character = advance
+    character : Char = advance
     case character
     when '(' then add_token(Token::Type::LeftParenthesis)
     when ')' then add_token(Token::Type::RightParenthesis)
@@ -86,14 +86,15 @@ class Scanner
     end
   end
 
-  private def identifier()
+  private def identifier
     while alpha?(peek) || digit?(peek)
       advance
     end
 
-    text = @source[@start..@current - 1]
-    type = @keywords[text] || Token::Type::Identifier
-    add_token(Token::Type::Identifier)
+    text = @source[@start...@current]
+    type = @keywords.fetch(text) { Token::Type::Identifier }
+
+    add_token(type)
   end
 
   private def number
@@ -132,7 +133,7 @@ class Scanner
 
   private def advance : Char
     @current += 1
-    @source[@current]
+    @source[@current - 1]
   end
 
   private def add_token(type : Token::Type)
@@ -140,7 +141,7 @@ class Scanner
   end
 
   private def add_token(type : Token::Type, literal : Token::LiteralType)
-    text : String = @source[@start..@current]
+    text : String = @source[@start...@current]
     @tokens.push(Token::Processor.new(type, text, @line, literal))
   end
 
@@ -158,8 +159,8 @@ class Scanner
     @source[@current + 1]
   end
 
-  private def string : Nil
-    until peek == '"' && at_end?
+  private def string
+    while peek != '"' && !at_end?
       @line += 1 if peek == '\n'
       advance
     end
@@ -170,7 +171,7 @@ class Scanner
 
     advance
 
-    value = @source[(@start + 1)..(@current - 1)]
+    value = @source[(@start + 1)...(@current - 1)]
     add_token(Token::Type::String, value)
   end
 end

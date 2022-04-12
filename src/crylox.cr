@@ -40,7 +40,7 @@ module Crylox
       scanner : Scanner = Scanner.new(command)
       tokens : Array(Token::Processor) = scanner.scan_tokens
       tokens.each do |i|
-        puts i
+        puts "=> #{i}"
       end
       @@had_error = false
     end
@@ -62,7 +62,7 @@ module Crylox
 
     def self.report(line : Int32, where : String, message : String)
       puts <<-REPORT
-      [line #{line}]: Error! #{where} - #{message}
+      [Error at line #{line}]: #{where} - #{message}
       REPORT
     end
   end
